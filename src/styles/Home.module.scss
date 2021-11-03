@@ -1,0 +1,35 @@
+$color-link: blueViolet;
+
+.footer {
+    display: flex;
+    flex: 1;
+    padding: 2rem 0;
+    border-top: 1px solid #eaeaea;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.products {
+    list-style: none;
+    padding: 3em 0 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3em;
+}
+
+.productTitle {
+    font-size: 1.4em;
+    margin: 0.4em 0 0;
+}
+
+.productPrice {
+    margin: 0.4em 0 0;
+}
