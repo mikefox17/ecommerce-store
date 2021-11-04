@@ -1,13 +1,14 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Script from 'next/script';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import Header from '@components/Header';
 import Button from '@components/Button';
 import styles from '@styles/Home.module.scss';
 import Container from '@components/Container';
 import products from '@data/products.json';
 
-export default function Home() {
+export default function Home({ products }) {
     return (
         <>
             <Header />{' '}
@@ -32,28 +33,38 @@ export default function Home() {
                         <h2>Available Cards</h2>
                         <ul className={styles.products}>
                             {products.map(product => {
+                                const { featuredImage } = product;
                                 return (
                                     <li key={product.id}>
                                         <Image
-                                            width='846'
-                                            height='1200'
-                                            src={product.image}
-                                            alt={`Card of ${product.title}`}
+                                            width={
+                                                featuredImage.mediaDetails.width
+                                            }
+                                            height={
+                                                featuredImage.mediaDetails
+                                                    .height
+                                            }
+                                            src={featuredImage.sourceUrl}
+                                            alt={`Card of ${featuredImage.altText}`}
                                         />
                                         <h3 className={styles.productTitle}>
                                             {product.title}
                                         </h3>
                                         <p className={styles.productPrice}>
-                                            {product.price}
+                                            {product.productPrice}
                                         </p>
                                         <p>
                                             <Button
                                                 className='snipcart-add-item'
-                                                data-item-id={product.id}
-                                                data-item-price={product.price}
+                                                data-item-id={product.productId}
+                                                data-item-price={
+                                                    product.productPrice
+                                                }
                                                 data-item-url='/'
                                                 data-item-description=''
-                                                data-item-image={product.image}
+                                                data-item-image={
+                                                    featuredImage.sourceUrl
+                                                }
                                                 data-item-name={product.title}
                                             >
                                                 Add to cart
@@ -78,4 +89,60 @@ export default function Home() {
             </div>
         </>
     );
+}
+
+export async function getStaticProps() {
+    const client = new ApolloClient({
+        uri: 'http://localhost:10078/graphql',
+        cache: new InMemoryCache(),
+    });
+
+    const response = await client.query({
+        query: gql`
+            query AllProducts {
+                products {
+                    edges {
+                        node {
+                            id
+                            content
+                            title
+                            uri
+                            product {
+                                productId
+                                productPrice
+                            }
+                            slug
+                            featuredImage {
+                                node {
+                                    altText
+                                    sourceUrl
+                                    mediaDetails {
+                                        height
+                                        width
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+    });
+    const products = response.data.products.edges.map(({ node }) => {
+        const data = {
+            ...node,
+            ...node.product,
+            featuredImage: {
+                ...node.featuredImage.node,
+            },
+        };
+        return data;
+    });
+
+    console.log(products);
+    return {
+        props: {
+            products,
+        },
+    };
 }
