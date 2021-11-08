@@ -90,7 +90,7 @@ export async function getStaticProps({ params }) {
     const { productSlug } = params;
 
     const client = new ApolloClient({
-        uri: 'http://localhost:10078/graphql',
+        uri: 'https://hyperbros.wpengine.com/graphql',
         cache: new InMemoryCache(),
     });
 
@@ -140,7 +140,7 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
     const client = new ApolloClient({
-        uri: 'http://localhost:10078/graphql',
+        uri: 'https://hyperbros.wpengine.com/graphql',
         cache: new InMemoryCache(),
     });
 

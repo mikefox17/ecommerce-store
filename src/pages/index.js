@@ -110,7 +110,7 @@ export default function Home({ products }) {
 
 export async function getStaticProps() {
     const client = new ApolloClient({
-        uri: 'http://localhost:10078/graphql',
+        uri: 'https://hyperbros.wpengine.com/graphql',
         cache: new InMemoryCache(),
     });
 
