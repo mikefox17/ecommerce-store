@@ -49,7 +49,7 @@ export default function Product({ product }) {
                                 />
 
                                 <p className={styles.productPrice}>
-                                    ${product.productPrice}
+                                    $ {product.productPrice}
                                 </p>
                                 <p>
                                     <Button
