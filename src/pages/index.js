@@ -1,12 +1,12 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import Script from 'next/script';
+import Link from 'next/link';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import Header from '@components/Header';
 import Button from '@components/Button';
 import styles from '@styles/Home.module.scss';
 import Container from '@components/Container';
-import products from '@data/products.json';
 
 export default function Home({ products }) {
     return (
@@ -36,23 +36,40 @@ export default function Home({ products }) {
                                 const { featuredImage } = product;
                                 return (
                                     <li key={product.id}>
-                                        <Image
-                                            width={
-                                                featuredImage.mediaDetails.width
-                                            }
-                                            height={
-                                                featuredImage.mediaDetails
-                                                    .height
-                                            }
-                                            src={featuredImage.sourceUrl}
-                                            alt={`Card of ${featuredImage.altText}`}
-                                        />
-                                        <h3 className={styles.productTitle}>
-                                            {product.title}
-                                        </h3>
-                                        <p className={styles.productPrice}>
-                                            {product.productPrice}
-                                        </p>
+                                        <Link
+                                            href={`/products/${product.slug}`}
+                                        >
+                                            <a>
+                                                <Image
+                                                    width={
+                                                        featuredImage
+                                                            .mediaDetails.width
+                                                    }
+                                                    height={
+                                                        featuredImage
+                                                            .mediaDetails.height
+                                                    }
+                                                    src={
+                                                        featuredImage.sourceUrl
+                                                    }
+                                                    alt={`Card of ${featuredImage.altText}`}
+                                                />
+                                                <h3
+                                                    className={
+                                                        styles.productTitle
+                                                    }
+                                                >
+                                                    {product.title}
+                                                </h3>
+                                                <p
+                                                    className={
+                                                        styles.productPrice
+                                                    }
+                                                >
+                                                    {product.productPrice}
+                                                </p>
+                                            </a>
+                                        </Link>
                                         <p>
                                             <Button
                                                 className='snipcart-add-item'
